@@ -40,5 +40,6 @@ jobs:
         with:
           charts_dir: charts
           mark_as_latest: false
+          github_token: ${{ secrets.GITHUB_TOKEN }}
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
