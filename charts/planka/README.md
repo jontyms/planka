@@ -1,4 +1,3 @@
-# test
 # Planka Helm Chart
 
 [Planka](https://github.com/plankanban/planka) is an OSS alternative to Trello that you can host yourself, and this is a Helm Chart to make it easier to deploy to K8s.
