@@ -37,6 +37,7 @@ COPY --chown=node:node start.sh .
 COPY --chown=node:node server .
 COPY --chown=node:node healthcheck.js .
 
+
 RUN mv .env.sample .env
 
 COPY --from=server-dependencies --chown=node:node /app/node_modules node_modules
