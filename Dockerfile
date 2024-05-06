@@ -1,9 +1,7 @@
 FROM node:18-bookworm as server-dependencies
 
-RUN apk -U upgrade \
-  && apk add build-base python3 \
-  --no-cache
-
+RUN apt update && apt upgrade \
+  && apt --install build-essential python3 \
 WORKDIR /app
 
 COPY server/package.json server/package-lock.json ./
@@ -29,9 +27,8 @@ RUN DISABLE_ESLINT_PLUGIN=true npm run build
 
 FROM node:18-bookworm
 
-RUN apk -U upgrade \
-  && apk add bash \
-  --no-cache
+RUN apt update \
+  && apt upgrade -y \
 
 USER node
 WORKDIR /app

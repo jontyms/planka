@@ -2,21 +2,33 @@ FROM node:18-bookworm
 
 ARG VIPS_VERSION=8.14.5
 
-RUN apk -U upgrade \
-  && apk add \
-  bash pkgconf \
-  libjpeg-turbo libexif librsvg cgif tiff libspng libimagequant \
-  --no-cache \
-  && apk add \
-  build-base gobject-introspection-dev meson \
-  libjpeg-turbo-dev libexif-dev librsvg-dev cgif-dev tiff-dev libspng-dev libimagequant-dev \
-  --virtual vips-dependencies \
-  --no-cache \
-  && wget -O- https://github.com/libvips/libvips/releases/download/v${VIPS_VERSION}/vips-${VIPS_VERSION}.tar.xz | tar xJC /tmp \
+# Update and install packages
+RUN apt-get update && apt-get upgrade -y \
+  && apt-get install -y \
+  bash pkg-config \
+  libjpeg-turbo-progs libexif12 librsvg2-bin libcgif0 libtiff5 libspng0 libimagequant0 \
+  --no-install-recommends \
+  && apt-get install -y \
+  build-essential gobject-introspection meson \
+  libjpeg-dev libexif-dev librsvg2-dev libcgif-dev libtiff-dev libspng-dev libimagequant-dev \
+  --no-install-recommends
+
+# Download and build libvips from source
+RUN wget -O- https://github.com/libvips/libvips/releases/download/v${VIPS_VERSION}/vips-${VIPS_VERSION}.tar.xz | tar xJC /tmp \
   && cd /tmp/vips-${VIPS_VERSION} \
   && meson setup build-dir \
   && cd build-dir \
   && ninja \
   && ninja test \
   && ninja install \
-  && rm -rf /tmp/vips-${VIPS_VERSION}
+  && rm -rf /tmp/vips-${VIPS_VERSION} \
+  && apt-get purge -y \
+  build-essential gobject-introspection meson \
+  libjpeg-dev libexif-dev librsvg2-dev libcgif-dev libtiff-dev libspng-dev libimagequant-dev \
+  && apt-get autoremove -y \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
+# Set work directory
+WORKDIR /app
+
