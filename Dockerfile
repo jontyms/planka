@@ -1,7 +1,7 @@
 FROM node:18-bookworm as server-dependencies
 
 RUN apt update && apt upgrade \
-  && apt --install build-essential python3 \
+  && apt --install build-essential python3 
 WORKDIR /app
 
 COPY server/package.json server/package-lock.json ./
