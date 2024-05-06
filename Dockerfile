@@ -28,7 +28,8 @@ RUN DISABLE_ESLINT_PLUGIN=true npm run build
 FROM node:18-bookworm
 
 RUN apt update \
-  && apt upgrade -y \
+  && apt upgrade -y 
+
 USER node
 WORKDIR /app
 
