@@ -1,4 +1,4 @@
-FROM node:18-alpine as server-dependencies
+FROM node:18-bookworm as server-dependencies
 
 RUN apk -U upgrade \
   && apk add build-base python3 \
@@ -27,7 +27,7 @@ RUN npm install npm@latest --global \
 COPY client .
 RUN DISABLE_ESLINT_PLUGIN=true npm run build
 
-FROM node:18-alpine
+FROM node:18-bookworm
 
 RUN apk -U upgrade \
   && apk add bash \
